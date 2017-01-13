@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Pulse (Pro)totype</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  </head>
+  <body>
+    <progress class="progress" id="p-bar" style="width: 100%" value="0" max="100" aria-describedby="example-caption-1"></progress>
+    <div style="height: 100%">
+      <img id="photo-render" src="photo.jpg" style="width: 100%; "/>
+    </div>
+
+  <div  style="text-align: center;">
+    <button id="refresh" type="button" class="btn btn-default">Refresh</button>
+  </div>
+  </body>
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+  </script>
+</html>
