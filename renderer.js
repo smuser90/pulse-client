@@ -4,16 +4,30 @@
 var ipc = require('electron').ipcRenderer;
 var img = document.getElementById('photo-render');
 var refreshButton = document.getElementById('refresh');
+var liveViewButton = document.getElementById('live-view');
 var progressBar = document.getElementById('p-bar');
 
-refreshButton.addEventListener('click', function () {
+var getNextFrame = false;
 
+refreshButton.addEventListener('click', function () {
+    getNextFrame = false;
     ipc.send('refresh-photo');
+});
+
+liveViewButton.addEventListener('click', function () {
+
+    getNextFrame = !getNextFrame;
+    if(getNextFrame){
+      ipc.send('live-view-frame');
+    }
 });
 
 ipc.on('render', function(event, data){
   console.log("Rendering photo");
   img.src = 'data:image/jpeg;base64,' + data;
+  if(getNextFrame){
+    ipc.send('live-view-frame');
+  }
 });
 
 ipc.on('progress',function(event, data){

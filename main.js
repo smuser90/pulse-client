@@ -73,6 +73,12 @@ io.on('connection', function(socket) {
     socket.emit('capture-photo');
   });
 
+  ipc.on('live-view-frame', function(event, arg){
+    timeStart = Date.now();
+    console.log("refreshing photo");
+    socket.emit('live-view-frame');
+  });
+
   CLIENT = socket;
 
   socket.on('push-photo', function(data){
