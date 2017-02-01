@@ -75,7 +75,7 @@ io.on('connection', function(socket) {
 
   ipc.on('live-view-frame', function(event, arg){
     timeStart = Date.now();
-    console.log("refreshing photo");
+    // console.log("refreshing photo");
     socket.emit('live-view-frame');
   });
 
@@ -90,7 +90,7 @@ io.on('connection', function(socket) {
     transmitTime = Date.now() - timeStart;
     if(transmitTime > 250){
       timeStart = Date.now();
-      console.log("Packet "+data.packet+"/"+data.packets);
+      // console.log("Packet "+data.packet+"/"+data.packets);
     }
 
     renderLine.sender.send( 'progress',  {
@@ -110,7 +110,7 @@ io.on('connection', function(socket) {
   socket.on('push-photo-complete', function(){
     var base64Data = _arrayBufferToBase64(photoData);
     transmitTime = Date.now() - photoStart;
-    console.log("Transmit time: "+transmitTime+"ms");
+    // console.log("Transmit time: "+transmitTime+"ms");
     renderLine.sender.send( 'progress',  {
       value: 100
     });

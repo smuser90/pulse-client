@@ -7,6 +7,9 @@ var refreshButton = document.getElementById('refresh');
 var liveViewButton = document.getElementById('live-view');
 var progressBar = document.getElementById('p-bar');
 
+var frames = 0;
+var timer = Date.now();
+
 var getNextFrame = false;
 
 refreshButton.addEventListener('click', function () {
@@ -23,11 +26,17 @@ liveViewButton.addEventListener('click', function () {
 });
 
 ipc.on('render', function(event, data){
-  console.log("Rendering photo");
-  img.src = 'data:image/jpeg;base64,' + data;
-  if(getNextFrame){
-    ipc.send('live-view-frame');
+  frames++;
+  if(Date.now() - timer > 1000){
+    var time = (Date.now() - timer) / 1000;
+    console.log("FPS: "+frames / time);
+    frames = 0;
+    timer = Date.now();
   }
+  img.src = 'data:image/jpeg;base64,' + data;
+  // if(getNextFrame){
+  //   ipc.send('live-view-frame');
+  // }
 });
 
 ipc.on('progress',function(event, data){
