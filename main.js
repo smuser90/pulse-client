@@ -7,6 +7,7 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 const btoa = require('btoa')
+const http = require('http')
 
 var ipc = require('electron').ipcMain;
 
@@ -22,7 +23,7 @@ function _arrayBufferToBase64( buffer ) {
     return btoa( binary );
 }
 
-var server = require('http').createServer();
+var server = http.createServer();
 var io = require('socket.io')(server);
 var ss = require('socket.io-stream');
 var fs = require('fs');
@@ -33,7 +34,7 @@ var photoStart = Date.now();
 var transmitTime = Date.now() - timeStart;
 
 
-const CHUNK_SIZE = 102400;
+const CHUNK_SIZE = 30720;
 
 const readline = require('readline');
 readline.emitKeypressEvents(process.stdin);
@@ -64,6 +65,41 @@ ipc.on('init', function(event, arg){
 
 var photoData = [];
 
+var getFrame = function(){
+  http.get({
+          host: '192.168.2.67',
+          path: '/frame'
+      }, function(response) {
+          // Continuously update stream with data
+          response.on('data', function(d) {
+
+              // photoData += d.toString('base64');
+              for(var i = 0; i < d.length; i++){
+                photoData.push(d[i]);
+              }
+          });
+          response.on('end', function() {
+            var base64Data = _arrayBufferToBase64(photoData);
+            // console.log(base64Data.length);
+            // console.log("************************************************");
+            // console.dir(photoData);
+            // console.log("------------------------------------------------");
+            renderLine.sender.send( 'render',  base64Data);
+            photoData= [];
+            getFrame();
+          });
+      });
+};
+
+ipc.on('live-view-frame', function(event, arg){
+  timeStart = Date.now();
+  // console.log("refreshing photo");
+  // socket.emit('live-view-frame');
+  getFrame();
+
+
+});
+
 io.on('connection', function(socket) {
   console.log("Connection succesful!");
 
@@ -76,7 +112,7 @@ io.on('connection', function(socket) {
   ipc.on('live-view-frame', function(event, arg){
     timeStart = Date.now();
     // console.log("refreshing photo");
-    socket.emit('live-view-frame');
+    // socket.emit('live-view-frame');
   });
 
   CLIENT = socket;
@@ -93,8 +129,8 @@ io.on('connection', function(socket) {
       // console.log("Packet "+data.packet+"/"+data.packets);
     }
 
-    renderLine.sender.send( 'progress',  {
-      value: Math.round((data.packet / data.packets) * 100)
+    socket.emit('push-photo-success', {
+      packet: data.packet, packets: data.packets
     });
 
     var i;
@@ -102,9 +138,10 @@ io.on('connection', function(socket) {
       photoData.push(data.fd[i]);
     }
 
-    socket.emit('push-photo-success', {
-      packet: data.packet, packets: data.packets
+    renderLine.sender.send( 'progress',  {
+      value: Math.round((data.packet / data.packets) * 100)
     });
+
   });
 
   socket.on('push-photo-complete', function(){
