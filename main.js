@@ -67,7 +67,7 @@ var photoData = [];
 
 var getFrame = function(){
   http.get({
-          host: '192.168.2.67',
+          host: '192.168.1.1',
           path: '/frame'
       }, function(response) {
           // Continuously update stream with data
