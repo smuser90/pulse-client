@@ -1,13 +1,13 @@
-const electron = require('electron')
+const electron = require('electron');
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 
-const path = require('path')
-const url = require('url')
-const btoa = require('btoa')
-const http = require('http')
+const path = require('path');
+const url = require('url');
+const btoa = require('btoa');
+const http = require('http');
 
 var ipc = require('electron').ipcMain;
 
@@ -34,7 +34,7 @@ var photoStart = Date.now();
 var transmitTime = Date.now() - timeStart;
 
 
-const CHUNK_SIZE = 30720;
+const CHUNK_SIZE = 102400;
 
 const readline = require('readline');
 readline.emitKeypressEvents(process.stdin);
@@ -62,6 +62,8 @@ ipc.on('init', function(event, arg){
   console.log("Init succesful");
   renderLine = event;
 });
+
+
 
 var photoData = [];
 
@@ -107,6 +109,13 @@ io.on('connection', function(socket) {
     timeStart = Date.now();
     console.log("refreshing photo");
     socket.emit('capture-photo');
+  });
+
+  ipc.on('timelapse', function(event, tl){
+    console.log('Starting timelapse...');
+    console.dir(tl);
+
+    socket.emit('timelapse', tl);
   });
 
   ipc.on('live-view-frame', function(event, arg){

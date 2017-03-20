@@ -5,6 +5,8 @@ var ipc = require('electron').ipcRenderer;
 var img = document.getElementById('photo-render');
 var refreshButton = document.getElementById('refresh');
 var liveViewButton = document.getElementById('live-view');
+var tlButton = document.getElementById('tl-button');
+var tlInterval = document.getElementById('tl-interval');
 var progressBar = document.getElementById('p-bar');
 
 var frames = 0;
@@ -15,6 +17,13 @@ var getNextFrame = false;
 refreshButton.addEventListener('click', function () {
     getNextFrame = false;
     ipc.send('refresh-photo');
+});
+
+tlButton.addEventListener('click', function(){
+  var tlObject = {
+    interval: $('#tl-interval').val()
+  };
+  ipc.send('timelapse', tlObject);
 });
 
 liveViewButton.addEventListener('click', function () {
