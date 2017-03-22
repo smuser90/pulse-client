@@ -6,7 +6,6 @@ var img = document.getElementById('photo-render');
 var refreshButton = document.getElementById('refresh');
 var liveViewButton = document.getElementById('live-view');
 var tlButton = document.getElementById('tl-button');
-var tlInterval = document.getElementById('tl-interval');
 var progressBar = document.getElementById('p-bar');
 
 var frames = 0;
@@ -21,7 +20,8 @@ refreshButton.addEventListener('click', function () {
 
 tlButton.addEventListener('click', function(){
   var tlObject = {
-    interval: $('#tl-interval').val()
+    interval: $('#tl-interval').val(),
+    photos: $('#tl-photos').val()
   };
   ipc.send('timelapse', tlObject);
 });
