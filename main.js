@@ -84,7 +84,9 @@ var getFrame = function(){
             var base64Data = _arrayBufferToBase64(photoData);
             renderLine.sender.send( 'render',  base64Data);
             photoData= [];
-            getFrame();
+            if(getNext){
+              getFrame();
+            }
           });
       });
 };
@@ -107,29 +109,60 @@ var getTLPreviewFrame = function(){
             var base64Data = _arrayBufferToBase64(photoData);
             renderLine.sender.send( 'render',  base64Data);
             photoData= [];
-            getTLPreviewFrame();
+            if(getNext){
+              getTLPreviewFrame();
+            }
           });
       });
 };
 
+
+
+var getCapture = function(){
+  http.get({
+          host: '192.168.1.1',
+          path: '/capture'
+      }, function(response) {
+          // Continuously update stream with data
+          response.on('data', function(d) {
+
+              // photoData += d.toString('base64');
+              for(var i = 0; i < d.length; i++){
+                photoData.push(d[i]);
+              }
+          });
+          response.on('end', function() {
+            var base64Data = _arrayBufferToBase64(photoData);
+            renderLine.sender.send( 'render',  base64Data);
+            photoData= [];
+          });
+      });
+};
+
+
+var getNext;
 ipc.on('live-view-frame', function(event, arg){
   timeStart = Date.now();
+  getNext = arg;
   getFrame();
 });
 
 ipc.on('tl-preview', function(event, arg){
   timeStart = Date.now();
+  getNext = arg;
   getTLPreviewFrame();
+});
+
+ipc.on('refresh-photo', function(event, arg){
+  timeStart = Date.now();
+  console.log("refreshing photo");
+  getCapture();
 });
 
 io.on('connection', function(socket) {
   console.log("Connection succesful!");
 
-  ipc.on('refresh-photo', function(event, arg){
-    timeStart = Date.now();
-    console.log("refreshing photo");
-    socket.emit('capture-photo');
-  });
+
 
   ipc.on('timelapse', function(event, tl){
     console.log('Starting timelapse...');

@@ -23,7 +23,7 @@ tlPreview.addEventListener('click', function () {
   console.log("Clicked tl preview button!");
     getNextFrame = !getNextFrame;
     if(getNextFrame){
-      ipc.send('tl-preview');
+      ipc.send('tl-preview', getNextFrame);
     }
 
 });
@@ -41,7 +41,7 @@ liveViewButton.addEventListener('click', function () {
 
     getNextFrame = !getNextFrame;
     if(getNextFrame){
-      ipc.send('live-view-frame');
+      ipc.send('live-view-frame', getNextFrame);
     }
 });
 
