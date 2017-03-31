@@ -6,6 +6,7 @@ var img = document.getElementById('photo-render');
 var refreshButton = document.getElementById('refresh');
 var liveViewButton = document.getElementById('live-view');
 var tlButton = document.getElementById('tl-button');
+var hdrButton = document.getElementById('hdr-button');
 var tlPreview = document.getElementById('tl-preview');
 var progressBar = document.getElementById('p-bar');
 
@@ -26,6 +27,14 @@ tlPreview.addEventListener('click', function () {
       ipc.send('tl-preview', getNextFrame);
     }
 
+});
+
+hdrButton.addEventListener('click', function(){
+  var hdrObject = {
+    evPerStep: $('#ev-steps').val(),
+    steps: $('#hdr-photos').val(),
+  };
+  ipc.send('hdr', hdrObject);
 });
 
 tlButton.addEventListener('click', function(){

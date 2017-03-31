@@ -169,7 +169,7 @@ io.on('connection', function(socket) {
   });
 
   ipc.on('hdr', function(event, hdr){
-
+    socket.emit('hdr', hdr);
   });
 
   CLIENT = socket;
