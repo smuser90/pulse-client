@@ -6,6 +6,7 @@ var img = document.getElementById('photo-render');
 var refreshButton = document.getElementById('refresh');
 var liveViewButton = document.getElementById('live-view');
 var tlButton = document.getElementById('tl-button');
+var tlPreview = document.getElementById('tl-preview');
 var progressBar = document.getElementById('p-bar');
 
 var frames = 0;
@@ -18,6 +19,15 @@ refreshButton.addEventListener('click', function () {
     ipc.send('refresh-photo');
 });
 
+tlPreview.addEventListener('click', function () {
+  console.log("Clicked tl preview button!");
+    getNextFrame = !getNextFrame;
+    if(getNextFrame){
+      ipc.send('tl-preview');
+    }
+
+});
+
 tlButton.addEventListener('click', function(){
   var tlObject = {
     interval: $('#tl-interval').val(),
@@ -27,6 +37,7 @@ tlButton.addEventListener('click', function(){
 });
 
 liveViewButton.addEventListener('click', function () {
+  console.log("Clicked live view button!");
 
     getNextFrame = !getNextFrame;
     if(getNextFrame){
