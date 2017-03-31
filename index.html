@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>Pulse (Pro)totype</title>
-    <link rel="stylesheet" href="bootstrap.min.css"
-  </head>
-  <body>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="pulse.css">
+</head>
+
+<body>
     <progress class="progress" id="p-bar" style="width: 100%" value="0" max="100" aria-describedby="example-caption-1"></progress>
     <div style="height: 100%">
-      <img id="photo-render" src="photo.jpg" style="width: 100%; "/>
+        <img id="photo-render" src="photo.jpg" style="width: 100%; " />
     </div>
 
-  <div  style="text-align: center;">
-    <button id="refresh" type="button" class="btn btn-default">Photo</button>
-    <button id="live-view" type="button" class="btn btn-default">Live View</button>
-    <button id="tl-preview" type="button" class="btn btn-default">TL Preview</button>
-  </div>
-<div class="form-group row">
-  <label for="example-text-input" class="col-form-label">Timelapse Interval MS</label>
-  <div>
-    <input class="form-control" type="number" value="5000" id="tl-interval">
-  </div>
-  <label for="example-text-input" class="col-form-label">TL Photos</label>
-  <div>
-    <input class="form-control" type="number" value="10" id="tl-photos">
-  </div>
-  <button id="tl-button" type="button" class="btn btn-default">Load TL</button>
-</div>
-  </body>
+    <div style="text-align: center;">
+        <button id="refresh" type="button" class="btn btn-default">Photo</button>
+        <button id="live-view" type="button" class="btn btn-default">Live View</button>
+        <button id="tl-preview" type="button" class="btn btn-default">TL Preview</button>
+    </div>
+    <div class="center">
+        <div class="form-group row">
+            <label for="example-text-input" class="col-form-label">Timelapse Interval MS</label>
+            <div>
+                <input class="form-control" type="number" value="5000" id="tl-interval">
+            </div>
+            <label for="example-text-input" class="col-form-label">TL Photos</label>
+            <div>
+                <input class="form-control" type="number" value="10" id="tl-photos">
+            </div>
+            <button id="tl-button" type="button" class="btn btn-default">Load TL</button>
+        </div>
 
-  <script>window.$ = window.jQuery = require('./jquery.min.js');</script>
-  <script>
+        <div class="form-group row">
+            <label for="example-text-input" class="col-form-label">HDR Photos</label>
+            <div>
+                <input class="form-control" type="number" value="5" id="hdr-photos">
+            </div>
+            <label for="example-text-input" class="col-form-label">EV Steps Thirds</label>
+            <div>
+                <input class="form-control" type="number" value="3" id="ev-steps">
+            </div>
+            <button id="hdr-button" type="button" class="btn btn-default">Load HDR</button>
+        </div>
+    </div>
+</body>
+
+<script>
+    window.$ = window.jQuery = require('./jquery.min.js');
+</script>
+<script>
     // You can also require other files to run in this process
     require('./renderer.js')
-  </script>
+</script>
+
 </html>

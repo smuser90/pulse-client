@@ -91,7 +91,6 @@ var getFrame = function(){
       });
 };
 
-
 var getTLPreviewFrame = function(){
   http.get({
           host: '192.168.1.1',
@@ -115,8 +114,6 @@ var getTLPreviewFrame = function(){
           });
       });
 };
-
-
 
 var getCapture = function(){
   http.get({
@@ -169,6 +166,10 @@ io.on('connection', function(socket) {
     console.dir(tl);
 
     socket.emit('timelapse', tl);
+  });
+
+  ipc.on('hdr', function(event, hdr){
+
   });
 
   CLIENT = socket;
