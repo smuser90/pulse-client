@@ -15,6 +15,8 @@ var timer = Date.now();
 
 var getNextFrame = false;
 
+var cameraProperty, cameraValue, valueIndex, cameraConfigs;
+
 refreshButton.addEventListener('click', function () {
     getNextFrame = false;
     ipc.send('refresh-photo');
@@ -54,6 +56,35 @@ liveViewButton.addEventListener('click', function () {
     }
 });
 
+ipc.on('populate-configs', function(event, configs){
+  console.log('Got camera configs');
+  console.dir(configs);
+
+  cameraConfigs = configs.main.children.capturesettings;
+
+  var settings = configs.main.children.capturesettings;
+
+  $('#camera-settings ul').empty();
+
+  for(var prop in settings.children){
+    $('#camera-settings ul').append('<li><a href="#" >'+settings.children[prop].label+'</a></li>');
+  }
+});
+
+var populateValues = function(){
+  for(var prop in cameraConfigs.children){
+    if(prop == cameraProperty.replace(/\s/g,'').toLowerCase()){
+      console.log("Found a match! " + prop);
+      $('#camera-values ul').empty();
+      var property = cameraConfigs.children[prop];
+      console.dir(property);
+      for(var val in property.choices){
+        $('#camera-values ul').append('<li><a href="#" >'+property.choices[val]+'</a></li>');
+      }
+    }
+  }
+};
+
 ipc.on('render', function(event, data){
   frames++;
   if(Date.now() - timer > 1000){
@@ -73,3 +104,23 @@ ipc.on('progress',function(event, data){
 });
 
 ipc.send('init');
+
+$(document).ready(function() {
+    console.log("Ready. Loading watches...");
+    $('#camera-settings').on( 'click', '.dropdown-menu li a', function() {
+      console.log('item selected');
+      cameraProperty = $(this).text();
+       $('#setting-selected').text(cameraProperty);
+       populateValues();
+    });
+
+    $('#camera-values').on( 'click', '.dropdown-menu li a', function() {
+
+      cameraValue = $(this).text();
+      valueIndex = $("#values-list li").index( $(this).parent());
+      console.log('item selected: '+cameraValue + ' '+valueIndex);
+      $('#value-selected').text(cameraValue);
+
+      ipc.send('set-config', {config: cameraProperty.replace(/\s/g,'').toLowerCase(), value: cameraValue});
+    });
+});

@@ -14,7 +14,7 @@
         <img id="photo-render" src="photo.jpg" style="width: 100%; " />
     </div>
 
-    <div style="text-align: center;">
+    <div style="text-align: center; margin: auto;">
         <button id="refresh" type="button" class="btn btn-default">Photo</button>
         <button id="live-view" type="button" class="btn btn-default">Live View</button>
         <button id="tl-preview" type="button" class="btn btn-default">TL Preview</button>
@@ -44,6 +44,31 @@
             <button id="hdr-button" type="button" class="btn btn-default">Load HDR</button>
         </div>
     </div>
+
+    <div id="settings" class="center" style="text-align: center;">
+        <div class="btn-group" id="camera-settings">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <div id="setting-selected">Settings</div>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="cSettings" id="settings-list">
+                <li><a href="#">Shutter</a></li>
+                <li><a href="#">ISO</a></li>
+                <li><a href="#">Aperture</a></li>
+            </ul>
+        </div>
+        <div class="btn-group" id="camera-values">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <div id="value-selected">Values</div>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="cValues" id="values-list">
+                <li><a href="#">1/800</a></li>
+                <li><a href="#">1/400</a></li>
+                <li><a href="#">1/200</a></li>
+            </ul>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -51,7 +76,8 @@
 </script>
 <script>
     // You can also require other files to run in this process
-    require('./renderer.js')
+    require('./renderer.js');
 </script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
 </html>

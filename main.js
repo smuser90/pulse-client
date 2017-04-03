@@ -157,8 +157,11 @@ ipc.on('refresh-photo', function(event, arg){
 });
 
 io.on('connection', function(socket) {
-  console.log("Connection succesful!");
+  console.log("Client connected succesfully!");
 
+  socket.on('send-configs', function(configs){
+    renderLine.sender.send('populate-configs', configs);
+  });
 
 
   ipc.on('timelapse', function(event, tl){
@@ -166,6 +169,11 @@ io.on('connection', function(socket) {
     console.dir(tl);
 
     socket.emit('timelapse', tl);
+  });
+
+  ipc.on('set-config', function(event, configData){
+    console.log("Setting config: "+configData.config+' - '+configData.value);
+    socket.emit('set-config', configData.config, configData.value);
   });
 
   ipc.on('hdr', function(event, hdr){
@@ -214,6 +222,9 @@ io.on('connection', function(socket) {
   socket.on('disconnect', function(){
     console.log("Client disconnected");
   });
+
+  socket.emit('get-configs');
+
 });
 
 server.listen(PORT, function() {
