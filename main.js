@@ -176,6 +176,11 @@ io.on('connection', function(socket) {
     socket.emit('timelapse', tl);
   });
 
+  ipc.on('compression-factor', function(event, cf){
+    console.log('Updating compression factor');
+    socket.emit('compression-factor', cf);
+  });
+
   ipc.on('set-config', function(event, configData){
     console.log("Setting config: "+configData.config+' - '+configData.value);
     socket.emit('set-config', configData.config, configData.value);

@@ -9,6 +9,7 @@ var tlButton = document.getElementById('tl-button');
 var hdrButton = document.getElementById('hdr-button');
 var tlPreview = document.getElementById('tl-preview');
 var progressBar = document.getElementById('p-bar');
+var cfButton = document.getElementById('cf-button');
 
 var frames = 0;
 var timer = Date.now();
@@ -16,6 +17,10 @@ var timer = Date.now();
 var getNextFrame = false;
 
 var cameraProperty, cameraValue, valueIndex, cameraConfigs;
+
+cfButton.addEventListener('click', function(){
+  ipc.send('compression-factor', $('#compression-factor').val());
+});
 
 refreshButton.addEventListener('click', function () {
     getNextFrame = false;
