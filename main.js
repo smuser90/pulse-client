@@ -82,9 +82,9 @@ var getFrame = function(){
           });
           response.on('end', function() {
             var base64Data = _arrayBufferToBase64(photoData);
-            renderLine.sender.send( 'render',  base64Data);
             photoData= [];
             if(getNext){
+              renderLine.sender.send( 'render',  base64Data);
               getFrame();
             }
           });
@@ -106,9 +106,10 @@ var getTLPreviewFrame = function(){
           });
           response.on('end', function() {
             var base64Data = _arrayBufferToBase64(photoData);
-            renderLine.sender.send( 'render',  base64Data);
+
             photoData= [];
             if(getNext){
+              renderLine.sender.send( 'render',  base64Data);
               getTLPreviewFrame();
             }
           });
@@ -141,13 +142,17 @@ var getNext;
 ipc.on('live-view-frame', function(event, arg){
   timeStart = Date.now();
   getNext = arg;
-  getFrame();
+  if(getNext){
+    getFrame();
+  }
 });
 
 ipc.on('tl-preview', function(event, arg){
   timeStart = Date.now();
   getNext = arg;
-  getTLPreviewFrame();
+  if(getNext){
+    getTLPreviewFrame();
+  }
 });
 
 ipc.on('refresh-photo', function(event, arg){

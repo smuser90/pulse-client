@@ -25,8 +25,10 @@ refreshButton.addEventListener('click', function () {
 tlPreview.addEventListener('click', function () {
   console.log("Clicked tl preview button!");
     getNextFrame = !getNextFrame;
-    if(getNextFrame){
-      ipc.send('tl-preview', getNextFrame);
+    ipc.send('tl-preview', getNextFrame);
+    if(!getNextFrame){
+      img.src="photo.jpg";
+      $('#FPS').text('0');
     }
 
 });
@@ -51,8 +53,10 @@ liveViewButton.addEventListener('click', function () {
   console.log("Clicked live view button!");
 
     getNextFrame = !getNextFrame;
-    if(getNextFrame){
-      ipc.send('live-view-frame', getNextFrame);
+    ipc.send('live-view-frame', getNextFrame);
+    if(!getNextFrame){
+      img.src="photo.jpg";
+      $('#FPS').text('0');
     }
 });
 
@@ -90,6 +94,7 @@ ipc.on('render', function(event, data){
   if(Date.now() - timer > 1000){
     var time = (Date.now() - timer) / 1000;
     console.log("FPS: "+frames / time);
+    $('#FPS').text(Math.ceil(frames / time));
     frames = 0;
     timer = Date.now();
   }
