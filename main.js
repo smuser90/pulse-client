@@ -11,8 +11,17 @@ const http = require('http');
 
 var ipc = require('electron').ipcMain;
 
+process.on('uncaughtException', function (error) {
+    console.log("Uncaught Exception: "+error);
+});
+
 var renderLine;
 
+
+/*
+This funcion will take a structure of type ArrayBuffer and convert it
+to a base64 array that is suitable for rendering JPEG
+*/
 function _arrayBufferToBase64( buffer ) {
     var binary = '';
     var bytes = new Uint8Array( buffer );
