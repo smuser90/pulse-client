@@ -65,6 +65,7 @@ liveViewButton.addEventListener('click', function () {
     }
 });
 
+//TODO need to extend this to not just grab the capture settings. There's also image settings, control settings
 ipc.on('populate-configs', function(event, configs){
   console.log('Got camera configs');
   console.dir(configs);
@@ -80,6 +81,7 @@ ipc.on('populate-configs', function(event, configs){
   }
 });
 
+//fills out the second list when a property is selected
 var populateValues = function(){
   for(var prop in cameraConfigs.children){
     if(prop == cameraProperty.replace(/\s/g,'').toLowerCase()){

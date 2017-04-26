@@ -9,12 +9,15 @@ const url = require('url');
 const btoa = require('btoa');
 const http = require('http');
 
+//interprocess comms. There are 2 main processes
+//renderer.js is the webbrowser/front end and main.js is the node backend
 var ipc = require('electron').ipcMain;
 
 process.on('uncaughtException', function (error) {
     console.log("Uncaught Exception: "+error);
 });
 
+//lets the backend talk to the front end
 var renderLine;
 
 
@@ -170,6 +173,7 @@ ipc.on('refresh-photo', function(event, arg){
   getCapture();
 });
 
+//this sets up high level socket command callbacks
 io.on('connection', function(socket) {
   console.log("Client connected succesfully!");
 
@@ -200,7 +204,7 @@ io.on('connection', function(socket) {
   });
 
   CLIENT = socket;
-
+//set up listeners for specific socket connection events
   socket.on('push-photo', function(data){
     if(data.packet === 0){
       photoData = [];
@@ -228,6 +232,7 @@ io.on('connection', function(socket) {
 
   });
 
+  //no longer relevant since we send photos over http
   socket.on('push-photo-complete', function(){
     var base64Data = _arrayBufferToBase64(photoData);
     transmitTime = Date.now() - photoStart;
